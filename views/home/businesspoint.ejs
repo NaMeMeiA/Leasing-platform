@@ -1,0 +1,35 @@
+<% include ../head %>
+			<div class="row">
+	     <br/><br/>
+	      <div class="col-sm-2"  style='background-color:#FFEBCD;margin-left:117px'>
+	      	<% include ./left %>
+	      </div>
+	      <br/>
+	      <div class="col-sm-8" id='main'>
+	      <!--  --------- 标签页-------------- -->
+			      <ul id="myTab" class="nav nav-tabs">
+			<li class="active">
+				<a href="#shopInfo" data-toggle="tab">
+					 经营点信息
+				</a>
+			</li>
+			<li><a href="#goodsInfo" data-toggle="tab">商品管理</a></li>
+			</ul>
+					<div id="myTabContent" class="tab-content">
+			<div class="tab-pane fade in active" id="shopInfo">
+			
+			<% include ./shopInfo %>
+			</div>
+					<div class="tab-pane fade" id="goodsInfo">
+				<% include ./goodsmanage %>
+<div>
+			</div>
+	      	
+	      
+	</div>
+	
+	 <div class="col-sm-1"></div>
+	 
+  </body>
+</html>
+

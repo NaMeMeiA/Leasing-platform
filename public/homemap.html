@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+ <head>
+
+  <meta charset="UTF-8">
+  <title>高德地图</title>
+  <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main.css?v=1.0"/>
+    <script type="text/javascript"
+            src="http://webapi.amap.com/maps?v=1.3&key=ebb3310e602e7027987911af5e30be56"></script>//高德地图key
+ </head>
+ <body>
+	<div id="mapContainer"><div>
+	<script>
+		//function init(){
+		//}
+	 var map=new AMap.Map('mapContainer',{
+	 
+	 //resizeEnable: true,
+		//rotateEnable: true,
+		//dragEnable: true,
+		//zoomEnable: true,
+		//设置可缩放的级别
+		//zooms: [3,18], //手机上默认为3~19缩放比例
+		//传入2D视图，设置中心点和缩放级别
+		view: new AMap.View2D({
+			center: new AMap.LngLat(116.397428, 39.90923),//经纬度
+			zoom: 12
+		})
+
+	 
+	 });
+	 function eventHandler(e){
+		 var lnglat=e.lnglat;
+	     //alert('点击');
+		   alert(lnglat.lng);//经度
+		   alert(lnglat.lat);//纬度
+		   var marker=new AMap.Marker({
+		   map:map,
+		   position:e.lnglat,
+		   title:"商店",
+		   icon:"http://webapi.amap.com/images/0.png",
+		   offset:new AMap.Pixel(-10,-34)//修改label相对于marker的位置
+		   });
+			marker.setMap(map);
+			marker.setTitle("专卖鼠标");
+			marker.setLabel({
+				 offset:new AMap.Pixel(-10,-34),
+				content:"逻辑商店"
+			});
+			
+
+
+		}
+	 var listener=
+			AMap.event.addListener(map,"click",eventHandler);
+	</script>
+	<!--bothtrack模态框-->
+
+ </body>
+</html>

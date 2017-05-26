@@ -1,0 +1,180 @@
+<% include ../head %>
+
+<link rel="stylesheet" href="http://cache.amap.com/lbs/static/main.css?v=1.0"/>
+    <script type="text/javascript"
+            src="http://webapi.amap.com/maps?v=1.3&key=ebb3310e602e7027987911af5e30be56"></script>
+			<style>
+				#myform input{
+					margin-top:6px;
+				}
+				#myform textarea{
+					margin-top:6px;
+				}
+				#myform label{
+					margin-top:6px;
+				}
+				#myform select{
+					margin-top:6px;
+				}
+			</style>
+				<script>
+				function onSubPub(){
+					if(pubform.shopname.value==''){
+						alert('营业点名称不允许空');
+						pubform.shopname.focus();
+						return false;
+					}
+					if(pubform.shopintr.value==''){
+						alert('营业点简介不允许空');
+						pubform.shopintr.focus();
+						return false;
+					}
+					if(pubform.shoptype.value==0){
+						alert('请选择营业类别');
+						pubform.shoptype.focus();
+						return false;
+					}
+
+					return true;
+				}
+			</script>
+
+
+			<div class="row">
+	     <br/><br/>
+	      <div class="col-sm-2"  style='background-color:#FFEBCD;margin-left:117px'>
+	      	<% include ./left %>
+	      </div>
+	      <br/>
+	      <div class="col-sm-8" id='main'>
+	      	<div id='toolbar'  style="font-size: 1.5em">请点击地图相关位置添加您的商铺</div>
+	      	
+	      	<div id="mapContainer" style='margin-top:36px;margin-left:12px;width:100%;height:600px'></div>
+	      	<div class="col-sm-1"></div>
+
+	      	<script type="text/javascript">
+	      		var map = new AMap.Map('mapContainer', {
+					view: new AMap.View2D({
+						center: new AMap.LngLat(116.397428, 39.90923),
+						zoom: 18
+					})
+				});
+						AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.OverView'],
+		    function(){
+		        map.addControl(new AMap.ToolBar());
+
+		        map.addControl(new AMap.Scale());
+
+		        map.addControl(new AMap.OverView({isOpen:true}));
+		});
+	      		var evt=null;
+				function eventHandler(event){
+					evt = event;
+					//原生JSS
+					//var input = document.getElementById('place').value = evt.lnglat.getLng() + ',' + evt.lnglat.getLat();
+					//$("#place").val(evt.lnglat.getLng() + ',' + evt.lnglat.getLat()); 
+
+					pubform.lng.value=event.lnglat.getLng();
+					pubform.lat.value=event.lnglat.getLat();
+					$('#myModal').modal('show');
+				}
+				var listener = AMap.event.addListener(map,"click",eventHandler);
+					</script>
+				
+				<script>
+				window.onload=function(e){
+
+						 <%rs.forEach(function(row){%>
+						  var marker = new AMap.Marker({                 
+						  map:map,                 
+						  position:[<%-row.shopposi%>], 
+						  iconStyle: '//webapi.amap.com/theme/v1.3/markers/b/mark_r.png',
+						  
+						  title: '<%-row.shopintro%>',
+						  
+						  offset:new AMap.Pixel(-1, -20)
+						  
+					   	});
+
+						marker.setLabel({
+					        offset: new AMap.Pixel(-10, -20),
+				   	        content: '<%-row.shopname%>', 
+					    });
+
+					<% }) %>
+
+	    		}
+
+	      	</script>
+
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+		<form  method="post"  action="./pubshop"  onsubmit="return onSubPub()"  name="pubform" enctype="multipart/form-data">
+			<div class="modal-content">
+				
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<!--<h4 class="modal-title" id="myModalLabel">
+							填写营业点信息：
+						</h4>
+					</div>
+					<div class="modal-body">
+					<form  method="post"  action="/home/shopInfo">
+						营业点名称：<input type="text" id="shangNa"  name="shangNa" />
+						简介：<input type="text" id="detail" name="detail"/>
+						<div  class="from-grop" id="myform">
+							<input type="" name="">
+
+						</div>
+							  <input type="hidden" name="place"  id="place"  >-->
+							  <h4 class="modal-title" id="myModalLabel">
+							填写营业点信息
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-group" id='myform'>
+						    <input type="text" class="form-control" id="name" name="shopname"  placeholder="请输入营业点名称">
+
+						    <textarea class="form-control" rows="5" placeholder="请输入营业简介"  name='shopintr'></textarea>
+						    <input type="text" class="form-control" id="name" name='keywords' placeholder="请输入查询关键词"   name="shopintr">
+						    <select class="form-control"  id="selec"  name='shoptype'>
+						      <option value='0'>请选择经营类别</option>
+						     <%rs.forEach(function(row){%>
+						      <option value='<%-row.id%>'>
+						      <%-row.typename%>
+						      </option>
+						      
+						      <%})%>
+						    </select>
+						    <label for="lastname" class="col-sm-2 control-label">店铺图片</label>
+						    <input type="file" id="inputfile" name="photour1">
+						    <input type="hidden" name="lng">
+						    <input type="hidden" name="lat">
+					  </div>
+					</div>
+					<div class="modal-footer">
+
+						<button type="button" class="btn btn-default" data-dismiss="modal">
+							关闭
+						</button>
+						<!--<button type="submit" class="btn btn-primary"  data-dismiss="modal" >
+							提交
+						</button>-->
+
+						<BUTTON type="submit" class="btn btn-primary" >提交
+						</BUTTON>
+						
+					</div>
+		</div>
+		</form>
+	</div>
+
+	</div>
+	
+	</div>
+	 <div class="col-sm-1"></div>
+  </body>
+</html>
+
