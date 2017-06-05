@@ -1,0 +1,105 @@
+
+		<link rel="stylesheet" href="http://cache.amap.com/lbs/static/main.css?v=1.0"/>
+		    <script type="text/javascript"
+		            src="http://webapi.amap.com/maps?v=1.3&key=ebb3310e602e7027987911af5e30be56"></script>
+
+			<% include ./update %>
+
+		<div id='toolbar' style="background-color: #FFFACD;width: 920px;height: 55px">
+	      		<button style="margin-top: 10px;float:right;margin-bottom: 10px" class="btn btn-primary"    data-toggle="modal" data-target="#myModal"   onclick="update()">修改店铺信息</button>
+	      		<button  style="margin-top: 10px;margin-right: 10px;float:right;"   class="btn btn-primary" data-toggle="modal" data-target="#myModal"   onclick="stop()">关停店铺</button>
+	      		<button  style="margin-top: 10px;margin-right: 10px;float:right;"   class="btn btn-primary" id="deleteshop" >店铺搬家</button>
+	      	</div>
+	      	<br/>
+	      	<br/>
+	      	<div id="mapContainer" style='margin-top:110px;margin-left:12px;width:100%;height:600px;'></div>
+	      	<div class="col-sm-1"></div>
+
+	      	<script type="text/javascript">
+	      	var marker=null;
+	      		var map = new AMap.Map('mapContainer', {
+					view: new AMap.View2D({
+						center: new AMap.LngLat(<%-rs[0].lng%>,<%-rs[0].lat%>),
+						zoom: 18
+					})
+				});
+						AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.OverView'],
+		    function(){
+		        map.addControl(new AMap.ToolBar());
+
+		        map.addControl(new AMap.Scale());
+
+		        map.addControl(new AMap.OverView({isOpen:true}));
+		});
+	      		var evt=null;
+				function eventHandler(event){
+					evt = event;
+					//$('#myModal').modal('show');
+				}
+				var listener = AMap.event.addListener(map,"click",eventHandler);
+					</script>
+				
+				<script>
+				window.onload=function(e){
+
+						 <%rs.forEach(function(row){%>
+						  marker = new AMap.Marker({                 
+						  map:map,                 
+						  position:[<%-row.lng%>,<%-row.lat%>], 
+						  iconStyle: '//webapi.amap.com/theme/v1.3/markers/b/mark_r.png',
+						  
+						  title: '<%-row.shopintr%>',
+						  
+						  offset:new AMap.Pixel(-1, -20)
+						  
+					   	});
+						 <% if(row.liveflag==1){%>
+						 	marker.setIcon("../images/shop/stop.png");
+						 	<%}%>
+						marker.setLabel({
+					        offset: new AMap.Pixel(-10, -20),
+				   	        content: '<%-row.shopname%>', 
+					    });
+
+
+
+	    			function buildnew(e){
+	    				var lnglat=e.lnglat;
+	    				 marker = new AMap.Marker({                 
+						  map:map,                 
+						  position:lnglat, 
+						  iconStyle: '//webapi.amap.com/theme/v1.3/markers/b/mark_r.png',
+						  
+						  title: '<%-row.shopintr%>',
+						  
+						  offset:new AMap.Pixel(-1, -20)
+						  
+					   	});
+						 <% if(row.liveflag==1){%>
+						 	marker.setIcon("../images/shop/stop.png");
+						 	<%}%>
+						marker.setLabel({
+					        offset: new AMap.Pixel(-10, -20),
+				   	        content: '<%-row.shopname%>', 
+					    });
+					    
+						location.href='/home/buildnew?lnglat='+lnglat;   
+					    
+	    			}
+
+
+	    		  AMap.event.addDomListener(document.getElementById('deleteshop'), 'click', function() {
+			    		var listener = AMap.event.addListener(map,"click",buildnew);
+					   map.remove(marker);
+
+					}, false);
+
+					<% }) %>
+
+
+
+	    		}
+
+
+
+	      	</script>

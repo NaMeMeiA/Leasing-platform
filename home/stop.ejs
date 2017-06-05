@@ -1,0 +1,71 @@
+<style>
+                #myform input{
+                    margin-top:6px;
+                }
+                #myform textarea{
+                    margin-top:6px;
+                }
+                #myform label{
+                    margin-top:6px;
+                }
+                #myform select{
+                    margin-top:6px;
+                }
+            </style>
+                <script>
+                function onSubPub(){
+                    if(pubform.shopname.value==''){
+                        alert('营业点名称不允许空');
+                        pubform.shopname.focus();
+                        return false;
+                    }
+                    if(pubform.shopintr.value==''){
+                        alert('营业点简介不允许空');
+                        pubform.shopintr.focus();
+                        return false;
+                    }
+                    if(pubform.shoptype.value==0){
+                        alert('请选择营业类别');
+                        pubform.shoptype.focus();
+                        return false;
+                    }
+
+                    return true;
+                }
+                
+
+            </script>
+             
+        <div class="modal fade" id="myModalstop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"   >
+    <div class="modal-dialog" >
+        <form  method="post"  action="/home/stopshop"  onsubmit="return onSubPub()"  name="pubform" enctype="multipart/form-data">
+            <div class="modal-content">
+                
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                      <h4 class="modal-title" id="myModalLabel">
+                    填写关停原因
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" id='myform'>
+                   
+                    <textarea class="form-control" rows="5" placeholder="请输入关停原因" id='stop' name='stop'  ></textarea>
+                   
+              </div>
+            </div>
+            <div class="modal-footer">
+
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+                关闭
+            </button>
+            <BUTTON type="submit" class="btn btn-primary" >提交
+            </BUTTON>
+            
+        </div>
+        </div>
+        </form>
+    </div><!-- /.modal -->
+</div>

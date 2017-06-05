@@ -1,0 +1,59 @@
+<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+   <script src="/javascripts/jquery-2.1.4.min.js"></script>
+   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<div class="shopping"  >
+<style>
+body{background: url(../images/11.jpg) 100% 100%;}
+.one{ float:left; width:100%; height:auto; text-align:center;font-size: 20px; }
+</style>
+<script>
+
+  function addnum(goodsid){
+
+    location.href="/pay/addnnum?goodsid="+goodsid;
+
+
+  }
+
+  function  reducenum(goodsid,num){
+      var arr=[goodsid,num];
+         location.href="/pay/reducenum?arr="+arr;
+  }
+</script>
+
+<hr/>
+  <span class="one" >购物车</span>
+  <br>
+  <hr/>
+
+<table class="table" style="margin-right: 60px;margin-left: 30px;">
+  <thead>
+    <tr>
+      <th>商品图片</th>
+      <th>商品名称</th>
+      <th>  数量 </th></tr>
+  </thead>
+  <tbody>
+    
+    
+    <%shopList.forEach(function(row){%>
+    <tr class="danger">
+      <td><img src="../<%-row.goodsimg%>" style='width: 30px;height: 30px;'></td>
+      <td><%-row.goodsname%></td>
+      <td><a href="#"  onclick="addnum(<%-row.goodsid%>)" > <span style="font-size: 20px;color: #0A0A0A">＋</span></a>&nbsp;&nbsp;<%-row.num%> &nbsp;&nbsp;<a href="#" onclick="reducenum(<%-row.goodsid%>,<%-row.num%>)">   <span style="font-size: 20px;color: #0A0A0A">－</span></a></td>
+      <td><input type='checkbox' name='chooseOne' value='<%-row.shopid%>_<%-row.goodsid%>'/></td>
+      </tr>
+      <%})%>
+      <tr class="warning">
+          
+          <td></td>
+
+          <td></td>
+            <td><button type="button" class="btn btn-danger btn-xs">确认购买  </button>&nbsp;&nbsp;全选<input type='checkbox' name='chooseAll'/></td>
+            <td></td>
+      </tr>
+  </tbody>
+</table>
+</div>
+</body>
+</html>

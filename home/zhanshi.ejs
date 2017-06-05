@@ -1,0 +1,91 @@
+<% include ../head %>
+
+        <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main.css?v=1.0"/>
+    <script type="text/javascript"
+            src="http://webapi.amap.com/maps?v=1.3&key=ebb3310e602e7027987911af5e30be56"></script>
+<script>
+    searchForm.keywords.value="<%-keywords%>";
+    
+</script>
+  <div class="row">
+      <div class="col-sm-1"></div>
+      <div class="col-sm-4">
+        <table class="table table-bordered">
+          <tbody>
+          <% rsGoods.forEach(function(row){ %>
+            <tr>
+            <td rowspan="2"> <a href='../home/shopping.html' target="_blank" > dddd<img src='../<%-row.goodsimg%>' style='width: 30px;height:30px;'/></a></td>
+              <td>
+                <%-row.goodsname%><br/>
+                <%-row.goodsintro%>
+              </td>
+            </tr>
+            <tr>
+              <td align='right'>
+               
+               <a href="/pay/putshopping?goodsid=<%-row.goodsid%>" target='_blank'><button type="button" class="btn btn-danger btn-xs">放入购物车</button></a>&nbsp;
+                价格:<%-row.price%>&nbsp;
+                好评度:<%-row.praise%>&nbsp;
+                <button type="button" class="btn btn-danger btn-xs"  onclick="position('<%-row.lng%>','<%-row.lat%>','<%-row.shopintr%>','<%-row.shopname%>','<%-row.liveflag%>')">go</button>&nbsp;
+              </td>
+            </tr>
+          <% }) %>
+          </tbody>
+      </table>
+    </div>
+    <div class="col-sm-6">
+
+ </head>
+ <body>
+  <div id="mapContainer"  style='margin-top:110px;margin-left:12px;width:100%;height:600px;'><div>
+  <script>
+  function position(lng,lat,shopintro,shopname,liveflag){
+  var marker=null;
+            var map = new AMap.Map('mapContainer', {
+          view: new AMap.View2D({
+            center: new AMap.LngLat(lng,lat),
+            zoom: 18
+          })
+        });
+            AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.OverView'],
+        function(){
+            map.addControl(new AMap.ToolBar());
+
+            map.addControl(new AMap.Scale());
+
+            map.addControl(new AMap.OverView({isOpen:true}));
+    });
+            var evt=null;
+        function eventHandler(event){
+          evt = event;
+          //$('#myModal').modal('show');
+        }
+        var listener = AMap.event.addListener(map,"click",eventHandler);        
+              marker = new AMap.Marker({                 
+              map:map,                 
+              position:[lng,lat], 
+              iconStyle: '//webapi.amap.com/theme/v1.3/markers/b/mark_r.png',
+              
+              title: shopintro,
+              
+              offset:new AMap.Pixel(-1, -20)
+              
+              });
+            if(liveflag==1){
+              marker.setIcon("../images/shop/stop.png");
+            }
+            
+            marker.setLabel({
+                  offset: new AMap.Pixel(-10, -20),
+                    content: shopname, 
+              });
+
+          }
+</script>
+    </div>
+    <div class="col-sm-1"></div>
+
+  </div>
+   <% include ../ui/login%>
+</body>
+</html>
